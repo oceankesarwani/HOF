@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - ML_ENGINE_URL=http://ml-engine:8000
+      - DATABASE_URL=file:./dev.db
+    depends_on:
+      - ml-engine
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+  ml-engine:
+    build:
+      context: ml-engine
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./ml-engine:/app
+      # Cache downloaded models
+      - huggingface-cache:/root/.cache/huggingface
+      - sentence-transformers-cache:/root/.cache/torch
+
+volumes:
+  huggingface-cache:
+  sentence-transformers-cache:
