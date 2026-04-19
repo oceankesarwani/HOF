@@ -52,7 +52,11 @@ export async function queryDocuments(
   const res = await fetch(`${ML_ENGINE_URL}/api/rag/query`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query: queryText, top_k: topK, where }),
+    body: JSON.stringify({ 
+      query: queryText, 
+      top_k: topK, 
+      ...(where && { where }) 
+    }),
   });
 
   if (!res.ok) {

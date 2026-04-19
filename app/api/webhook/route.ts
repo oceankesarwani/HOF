@@ -110,7 +110,7 @@ export async function GET() {
   });
   
   // Format to match expected frontend interface if needed
-  const formattedEvents = events.map(e => ({
+  const formattedEvents = events.map((e: any) => ({
     action: e.action,
     pr_number: e.prNumber,
     title: e.title,
