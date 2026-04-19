@@ -77,12 +77,20 @@ export default function RAGPage() {
       if (data.results && data.results.documents && data.results.documents.length > 0) {
         const docs = data.results.documents[0];
         const metas = data.results.metadatas ? data.results.metadatas[0] : [];
-        const formattedResults = docs.map((doc: string, idx: number) => ({
-          id: `result-${idx}`,
-          document: doc,
-          metadata: metas[idx] || {},
-          score: 0.99 // Distances are returned usually, keeping visual score high for now
-        }));
+        const dists = data.results.distances ? data.results.distances[0] : [];
+        
+        const formattedResults = docs.map((doc: string, idx: number) => {
+          // Chroma returns distances (lower is better). Convert to score.
+          const distance = dists[idx] ?? 0.5;
+          const score = Math.max(0, Math.min(1, 1 - distance));
+          
+          return {
+            id: `result-${idx}`,
+            document: doc,
+            metadata: metas[idx] || {},
+            score: score
+          };
+        });
         setResults(formattedResults);
       } else {
         setResults(data.results ?? []);
@@ -118,7 +126,7 @@ export default function RAGPage() {
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Header
         title="RAG Explorer"
-        subtitle="ChromaDB vector search — placeholder mode"
+        subtitle={statusInfo.connected ? "ChromaDB vector search — Live Mode" : "ChromaDB vector search — Placeholder Mode"}
       />
 
       <div style={{ flex: 1, padding: "24px 28px", overflowY: "auto" }}>
@@ -129,8 +137,8 @@ export default function RAGPage() {
             gap: 14,
             padding: "16px 20px",
             borderRadius: 12,
-            background: "rgba(245,158,11,0.08)",
-            border: "1px solid rgba(245,158,11,0.25)",
+            background: statusInfo.connected ? "rgba(16,185,129,0.08)" : "rgba(245,158,11,0.08)",
+            border: statusInfo.connected ? "1px solid rgba(16,185,129,0.25)" : "1px solid rgba(245,158,11,0.25)",
             marginBottom: 24,
             alignItems: "flex-start",
           }}
@@ -162,7 +170,7 @@ export default function RAGPage() {
               rel="noreferrer"
               style={{
                 fontSize: 12,
-                color: "#f59e0b",
+                color: statusInfo.connected ? "#10b981" : "#f59e0b",
                 textDecoration: "none",
                 display: "inline-flex",
                 alignItems: "center",
@@ -180,7 +188,7 @@ export default function RAGPage() {
               background: statusInfo.connected ? "rgba(16,185,129,0.1)" : "rgba(245,158,11,0.1)",
               border: statusInfo.connected ? "1px solid rgba(16,185,129,0.2)" : "1px solid rgba(245,158,11,0.2)",
               fontSize: 10,
-              color: statusInfo.connected ? "#065f46" : "#92400e",
+              color: statusInfo.connected ? "#10b981" : "#92400e",
               fontWeight: 700,
               letterSpacing: "0.06em",
               flexShrink: 0,

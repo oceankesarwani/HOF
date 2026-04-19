@@ -158,8 +158,8 @@ code, pre, kbd {
   background: linear-gradient(
     270deg,
     #040712,
-    #0d0b2e,
-    #051122,
+    #052e16,
+    #041a0e,
     #040712
   );
   background-size: 400% 400%;
@@ -344,7 +344,7 @@ code, pre, kbd {
 .skeleton {
   background: linear-gradient(90deg,
     var(--bg-elevated) 25%,
-    rgba(99, 102, 241, 0.1) 50%,
+    rgba(16, 185, 129, 0.1) 50%,
     var(--bg-elevated) 75%
   );
   background-size: 200% 100%;
