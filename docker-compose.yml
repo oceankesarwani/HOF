@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   web:
     build: 
@@ -12,6 +10,7 @@ services:
       - DATABASE_URL=file:./dev.db
     depends_on:
       - ml-engine
+    command: npm run dev
     volumes:
       - .:/app
       - /app/node_modules

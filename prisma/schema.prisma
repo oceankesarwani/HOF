@@ -20,6 +20,26 @@ model WebhookEvent {
   receivedAt  DateTime @default(now())
 }
 
+model DocSticker {
+  id           String   @id @default(cuid())
+  prNumber     Int
+  funcName     String
+  docPath      String
+  content      String   // The sticker message
+  createdAt    DateTime @default(now())
+}
+
+model AIDetection {
+  id                String   @id @default(cuid())
+  prNumber          Int      @unique
+  score             Int      // 0-100
+  confidence        String   // Low/Medium/High
+  reasoning         String   // JSON string of reasoning points
+  isBot             Boolean
+  recommendedAction String
+  createdAt         DateTime @default(now())
+}
+
 model ExpertHistory {
   id          String   @id @default(cuid())
   login       String

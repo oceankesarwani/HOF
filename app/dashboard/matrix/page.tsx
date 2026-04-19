@@ -18,17 +18,17 @@ import type { MatrixPoint } from "@/types";
 import { Info, AlertCircle } from "lucide-react";
 
 const QUADRANT_COLORS: Record<string, string> = {
-  "High Effort / High Impact":  "#ef4444",
-  "Low Effort / High Impact":   "#10b981",
-  "High Effort / Low Impact":   "#f59e0b",
-  "Low Effort / Low Impact":    "#6366f1",
+  "High Effort / High Impact": "#ef4444",
+  "Low Effort / High Impact": "#10b981",
+  "High Effort / Low Impact": "#f59e0b",
+  "Low Effort / Low Impact": "#6366f1",
 };
 
 const QUADRANT_LABELS = [
   { x: 75, y: 75, text: "High Effort / High Impact", color: "#ef4444", sub: "Ship carefully" },
-  { x: 25, y: 75, text: "Low Effort / High Impact",  color: "#10b981", sub: "Quick wins" },
-  { x: 75, y: 25, text: "High Effort / Low Impact",  color: "#f59e0b", sub: "Evaluate scope" },
-  { x: 25, y: 25, text: "Low Effort / Low Impact",   color: "#6366f1", sub: "Routine changes" },
+  { x: 25, y: 75, text: "Low Effort / High Impact", color: "#10b981", sub: "Quick wins" },
+  { x: 75, y: 25, text: "High Effort / Low Impact", color: "#f59e0b", sub: "Evaluate scope" },
+  { x: 25, y: 25, text: "Low Effort / Low Impact", color: "#6366f1", sub: "Routine changes" },
 ];
 
 interface CustomDotProps {

@@ -1,6 +1,9 @@
-import { listPRs, getPRFiles, getPRDiff } from "@/lib/github";
+import { listPRs, getPRFiles, getPRDiff, getPRStats } from "@/lib/github";
 import { computeEffort, computeImpactAsync } from "@/lib/impact";
 import type { MatrixPoint } from "@/types";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function GET() {
   try {
@@ -10,19 +13,24 @@ export async function GET() {
       prs.slice(0, 30).map(async (pr) => {
         let filenames: string[] = [];
         let diff = "";
+        let stats = { additions: 0, deletions: 0 };
+        
         try {
-          const files = await getPRFiles(pr.number);
+          // Fetch stats (additions/deletions), files, and diff in parallel
+          const [files, diffText, prStats] = await Promise.all([
+            getPRFiles(pr.number),
+            getPRDiff(pr.number),
+            getPRStats(pr.number)
+          ]);
           filenames = files.map((f) => f.filename);
-          diff = await getPRDiff(pr.number);
-        } catch {
-          // Some PRs might not have file data
-          console.warn(`Failed to fetch diff/files for PR ${pr.number}`);
+          diff = diffText;
+          stats = prStats;
+        } catch (e) {
+          console.warn(`Failed to fetch details for PR ${pr.number}`, e);
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const prAny = pr as any;
-        const additions = prAny.additions ?? 0;
-        const deletions = prAny.deletions ?? 0;
+        const additions = stats.additions ?? 0;
+        const deletions = stats.deletions ?? 0;
 
         return {
           prNumber: pr.number,

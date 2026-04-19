@@ -72,13 +72,21 @@ export async function POST(request: NextRequest) {
 
     console.log(`[Webhook] PR #${prNumber} (${action}) by ${senderLogin} in ${repoName}`);
 
-    // Trigger Knowledge Bridge background task async
+    // Trigger Knowledge Bridge background tasks async
     if (action === "opened" || action === "synchronize") {
+      // 1. Summarization
       fetch(`http://localhost:3000/api/summarize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prNumber }),
-      }).catch(e => console.warn("Failed to trigger analysis", e));
+      }).catch(e => console.warn("Failed to trigger summarization", e));
+
+      // 2. Documentation Sync Check
+      fetch(`http://localhost:3000/api/sync/check`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prNumber }),
+      }).catch(e => console.warn("Failed to trigger doc-sync check", e));
     }
 
     return Response.json({

@@ -46,12 +46,13 @@ export async function embedDocument(
  */
 export async function queryDocuments(
   queryText: string,
-  topK: number = 3
+  topK: number = 3,
+  where: any = null
 ): Promise<any> {
   const res = await fetch(`${ML_ENGINE_URL}/api/rag/query`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ query: queryText, top_k: topK }),
+    body: JSON.stringify({ query: queryText, top_k: topK, where }),
   });
 
   if (!res.ok) {

@@ -8,6 +8,32 @@ interface ImpactRule {
 }
 
 const IMPACT_RULES: ImpactRule[] = [
+  // Specific File Types (Low Impact by Default)
+  {
+    pattern: /\.(css|scss|sass|less|styl|styled)$/i,
+    score: 15,
+    level: "low",
+    label: "Styles",
+  },
+  {
+    pattern: /\.(docs|documentation|readme|changelog|contributing|md|mdx|txt|rst)$/i,
+    score: 10,
+    level: "low",
+    label: "Docs",
+  },
+  {
+    pattern: /\.(png|jpg|jpeg|svg|gif|ico|webp|woff|ttf|eot)$/i,
+    score: 5,
+    level: "low",
+    label: "Assets",
+  },
+  {
+    pattern: /\/(tests|test|spec|__tests__|__mocks__|fixtures)/i,
+    score: 20,
+    level: "low",
+    label: "Tests",
+  },
+
   // Critical — authentication, authorization, secrets
   {
     pattern: /\/(auth|authentication|oauth|login|logout|session|token|jwt|password|credentials|secret)/i,
@@ -65,37 +91,6 @@ const IMPACT_RULES: ImpactRule[] = [
     level: "medium",
     label: "Pages",
   },
-  // Low — tests, docs, styles, assets
-  {
-    pattern: /\/(tests|test|spec|__tests__|__mocks__|fixtures)/i,
-    score: 20,
-    level: "low",
-    label: "Tests",
-  },
-  {
-    pattern: /\/(docs|documentation|readme|changelog|contributing)/i,
-    score: 10,
-    level: "low",
-    label: "Docs",
-  },
-  {
-    pattern: /\.(css|scss|sass|less|styl|styled)$/i,
-    score: 15,
-    level: "low",
-    label: "Styles",
-  },
-  {
-    pattern: /\.(md|mdx|txt|rst)$/i,
-    score: 10,
-    level: "low",
-    label: "Markdown",
-  },
-  {
-    pattern: /\.(png|jpg|jpeg|svg|gif|ico|webp|woff|ttf|eot)$/i,
-    score: 5,
-    level: "low",
-    label: "Assets",
-  },
 ];
 
 const DEFAULT_SCORE = 40; // fallback for unmatched paths
@@ -114,6 +109,23 @@ export function getFileImpact(filename: string): {
 }
 
 export async function computeImpactAsync(diffText: string, filenames: string[]): Promise<number> {
+  const heuristicScore = computeImpact(filenames);
+  
+  console.log(`[Impact Debug] Heuristic Score for files:`, {
+    filenames,
+    heuristicScore
+  });
+
+  // Category-based caps to prevent false escalations
+  // Low: Styles, Docs, Assets, Tests (<= 30)
+  // Medium: Components, Services, Pages (<= 75)
+  let maxPossibleScore = 100;
+  if (heuristicScore <= 20) maxPossibleScore = 30; // Styles/Assets/Docs strictly low
+  else if (heuristicScore <= 40) maxPossibleScore = 55; // Minor components
+  else if (heuristicScore <= 60) maxPossibleScore = 75; // Standard features
+
+  let finalScore = heuristicScore;
+
   const ML_ENGINE_URL = process.env.ML_ENGINE_URL || "http://localhost:8000";
   
   if (diffText && diffText.length > 5) {
@@ -125,24 +137,39 @@ export async function computeImpactAsync(diffText: string, filenames: string[]):
       });
       if (res.ok) {
         const data = await res.json();
-        // High risk = 90, Low = 20.
-        return data.risk_level === "High" ? 90 : 20;
+        console.log(`[Impact Debug] ML Engine returned ${data.risk_level} (raw: ${data.raw_score})`);
+        
+        // Only allow AI to push score higher if we're not in a 'Low Impact' category
+        if (data.risk_level === "High" && heuristicScore > 20) {
+            finalScore = Math.min(maxPossibleScore, finalScore + 40);
+        } else if (data.risk_level === "Low") {
+            finalScore = Math.max(10, finalScore - 10);
+        }
       }
     } catch (e) {
       console.warn("ML classification failed, falling back to heuristics");
     }
   }
 
-  return computeImpact(filenames);
+  // Final clamp based on category
+  return Math.min(maxPossibleScore, finalScore);
 }
 
 export function computeImpact(filenames: string[]): number {
   if (filenames.length === 0) return 0;
-  const scores = filenames.map((f) => getFileImpact(f).score);
-  // Impact = weighted by max + average: gives importance to any critical file
+  const detailedScores = filenames.map((f) => ({
+    file: f,
+    score: getFileImpact(f).score,
+    label: getFileImpact(f).label
+  }));
+  
+  const scores = detailedScores.map(d => d.score);
   const max = Math.max(...scores);
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
-  return Math.round(max * 0.6 + avg * 0.4);
+  const final = Math.round(max * 0.6 + avg * 0.4);
+
+  console.log(`[Impact Debug] Detail:`, { detailedScores, final });
+  return final;
 }
 
 export function computeEffort(additions: number, deletions: number): number {

@@ -52,6 +52,180 @@ export default function PRsPage() {
     return <span className={`badge ${cls}`}>{state}</span>;
   }
 
+  function HealthBadge({ prNumber }: { prNumber: number }) {
+    const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+    const [data, setData] = useState<any>(null);
+
+    async function checkHealth() {
+      setStatus("loading");
+      try {
+        const res = await fetch("/api/prs/health", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prNumber }),
+        });
+        const result = await res.json();
+        setData(result);
+        setStatus("done");
+      } catch (e) {
+        setStatus("error");
+      }
+    }
+
+    if (status === "idle") {
+      return (
+        <button 
+          onClick={checkHealth}
+          style={{
+            fontSize: 10,
+            padding: "4px 8px",
+            background: "rgba(99,102,241,0.1)",
+            border: "1px solid rgba(99,102,241,0.2)",
+            borderRadius: 4,
+            color: "#818cf8",
+            cursor: "pointer",
+            fontWeight: 700,
+          }}
+        >
+          Check Health
+        </button>
+      );
+    }
+
+    if (status === "loading") {
+      return <div className="skeleton" style={{ height: 20, width: 80, borderRadius: 4 }} />;
+    }
+
+    if (status === "error") {
+      return <span style={{ fontSize: 10, color: "#ef4444" }}>Error</span>;
+    }
+
+    const { classification, score } = data;
+    const color = 
+      classification === "Ready for Review" ? "#10b981" :
+      classification === "Needs More Info" ? "#f59e0b" : "#ef4444";
+
+    return (
+      <div 
+        title={data.reasoning}
+        style={{ 
+          display: "flex", 
+          flexDirection: "column", 
+          alignItems: "center", 
+          gap: 2,
+          cursor: "help"
+        }}
+      >
+        <span 
+          style={{ 
+            fontSize: 9, 
+            fontWeight: 800, 
+            color, 
+            textTransform: "uppercase",
+            background: `${color}15`,
+            padding: "1px 4px",
+            borderRadius: 3,
+            lineHeight: 1,
+            whiteSpace: "nowrap"
+          }}
+        >
+          {classification.split(' ').slice(-1)}
+        </span>
+        <span style={{ fontSize: 13, fontWeight: 700, color: "#f1f5f9", lineHeight: 1 }}>
+          {score}
+        </span>
+      </div>
+    );
+  }
+
+  function AIDetectionBadge({ prNumber }: { prNumber: number }) {
+    const [status, setStatus] = useState<"idle" | "loading" | "done" | "error">("idle");
+    const [data, setData] = useState<any>(null);
+
+    async function checkAI() {
+      setStatus("loading");
+      try {
+        const res = await fetch("/api/prs/detect-ai", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prNumber }),
+        });
+        const result = await res.json();
+        setData(result);
+        setStatus("done");
+      } catch (e) {
+        setStatus("error");
+      }
+    }
+
+    if (status === "idle") {
+      return (
+        <button 
+          onClick={checkAI}
+          style={{
+            fontSize: 10,
+            padding: "4px 8px",
+            background: "rgba(6,182,212,0.1)",
+            border: "1px solid rgba(6,182,212,0.2)",
+            borderRadius: 4,
+            color: "#06b6d4",
+            cursor: "pointer",
+            fontWeight: 700,
+          }}
+        >
+          Verify AI
+        </button>
+      );
+    }
+
+    if (status === "loading") {
+      return <div className="skeleton" style={{ height: 20, width: 80, borderRadius: 4 }} />;
+    }
+
+    if (status === "error") return null;
+
+    const score = data.score ?? 0;
+    const isBot = data.isBot ?? false;
+    const reasoning = JSON.parse(data.reasoning || "[]");
+
+    return (
+      <div 
+        title={reasoning.join("\n")}
+        style={{ 
+          display: "inline-flex", 
+          alignItems: "center", 
+          gap: 6,
+          cursor: "help",
+          padding: "5px 10px",
+          borderRadius: 8,
+          background: isBot ? "rgba(239,68,68,0.12)" : "rgba(16,185,129,0.12)",
+          border: `1px solid ${isBot ? "rgba(239,68,68,0.3)" : "rgba(16,185,129,0.3)"}`,
+          boxShadow: isBot ? "0 0 10px rgba(239,68,68,0.1)" : "none",
+          transition: "all 0.2s ease"
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      >
+        <span style={{ fontSize: 13, fontWeight: 800, color: isBot ? "#fca5a5" : "#6ee7b7", letterSpacing: "-0.02em" }}>
+          {score}%
+        </span>
+        {isBot && (
+          <div 
+            style={{ 
+              width: 6, 
+              height: 6, 
+              borderRadius: "50%", 
+              background: "#ef4444", 
+              boxShadow: "0 0 8px #ef4444" 
+            }} 
+          />
+        )}
+      </div>
+    );
+  }
+
+  const GRID_COLS = "40px 1fr 100px 80px 100px 100px 70px 70px 100px 40px";
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <Header
@@ -106,7 +280,7 @@ export default function PRsPage() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "40px 1fr 100px 80px 80px 70px 100px 40px",
+              gridTemplateColumns: GRID_COLS,
               padding: "10px 20px",
               borderBottom: "1px solid var(--border-subtle)",
               fontSize: 11,
@@ -122,6 +296,8 @@ export default function PRsPage() {
             <span>Title</span>
             <span>Author</span>
             <span>Status</span>
+            <span style={{ textAlign: "center" }}>Health</span>
+            <span style={{ textAlign: "center" }}>AI Prob</span>
             <span style={{ textAlign: "center" }}>+</span>
             <span style={{ textAlign: "center" }}>−</span>
             <span>Updated</span>
@@ -149,7 +325,7 @@ export default function PRsPage() {
                 key={pr.id}
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "40px 1fr 100px 80px 80px 70px 100px 40px",
+                  gridTemplateColumns: GRID_COLS,
                   padding: "12px 20px",
                   borderBottom: "1px solid rgba(99,102,241,0.06)",
                   gap: 12,
@@ -210,6 +386,14 @@ export default function PRsPage() {
                 </div>
 
                 <StatePill state={pr.state} />
+
+                <div style={{ textAlign: "center" }}>
+                   <HealthBadge prNumber={pr.number} />
+                </div>
+
+                <div style={{ textAlign: "center" }}>
+                   <AIDetectionBadge prNumber={pr.number} />
+                </div>
 
                 <div
                   style={{

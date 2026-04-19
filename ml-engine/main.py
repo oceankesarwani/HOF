@@ -40,6 +40,7 @@ class EmbedPayload(BaseModel):
 class QueryPayload(BaseModel):
     query: str
     top_k: int = 3
+    where: Dict[str, Any] = None
 
 # --- Endpoints ---
 
@@ -64,8 +65,16 @@ def classify_diff(payload: DiffPayload):
     results = classifier(truncated)
     scored_label = results[0]['label'] # e.g. POSITIVE / NEGATIVE
     
-    # Map mock labels to our system states
-    risk = "Low" if scored_label == "POSITIVE" else "High"
+    # IMPROVED: De-escalate risk for cosmetic/small changes
+    diff_text = payload.diff.lower()
+    is_cosmetic = any(x in diff_text for x in ["color", "hex", "#", "background", "font", "padding"])
+    is_short = len(payload.diff) < 100
+
+    if is_cosmetic or is_short:
+        risk = "Low"
+    else:
+        # Map mock labels to our system states
+        risk = "Low" if scored_label == "POSITIVE" else "High"
     
     return {
         "status": "success",
@@ -90,12 +99,13 @@ def embed_document(payload: EmbedPayload):
 
 @app.post("/api/rag/query")
 def query_documents(payload: QueryPayload):
-    """Searches for similar doc chunks"""
+    """Searches for similar doc chunks with optional metadata filtering"""
     query_emb = embedder.encode(payload.query).tolist()
     
     results = docs_collection.query(
         query_embeddings=[query_emb],
-        n_results=payload.top_k
+        n_results=payload.top_k,
+        where=payload.where
     )
     
     return {"status": "success", "results": results}
