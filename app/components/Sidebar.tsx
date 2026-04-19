@@ -87,14 +87,14 @@ export default function Sidebar() {
       >
         <div
           style={{
-            width: 34,
-            height: 34,
-            borderRadius: 9,
-            background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+            width: 32,
+            height: 32,
+            borderRadius: 8,
+            background: "linear-gradient(135deg, #10b981, #059669)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: "0 0 16px rgba(99,102,241,0.4)",
+            boxShadow: "0 0 15px rgba(16,185,129,0.4)",
             flexShrink: 0,
           }}
         >
@@ -110,7 +110,7 @@ export default function Sidebar() {
               lineHeight: 1,
             }}
           >
-            Commit<span style={{ color: "#818cf8" }}>Guard</span>
+            Commit<span style={{ color: "#34d399" }}>Guard</span>
           </div>
           <div style={{ fontSize: 10, color: "#475569", marginTop: 2, letterSpacing: "0.05em" }}>
             PR INTELLIGENCE
@@ -136,28 +136,29 @@ export default function Sidebar() {
                 gap: 10,
                 padding: "9px 10px",
                 borderRadius: 8,
-                marginBottom: 2,
                 textDecoration: "none",
-                transition: "all 0.2s ease",
                 position: "relative",
                 background: active
-                  ? "rgba(99,102,241,0.15)"
+                  ? "rgba(16, 185, 129, 0.15)"
                   : "transparent",
                 border: active
-                  ? "1px solid rgba(99,102,241,0.25)"
+                  ? "1px solid rgba(16, 185, 129, 0.25)"
                   : "1px solid transparent",
+                marginBottom: 4,
+                transition: "all 0.2s",
+                boxShadow: active ? "0 4px 15px rgba(0, 0, 0, 0.2)" : "none",
               }}
             >
               <Icon
                 size={16}
-                color={active ? "#818cf8" : "#475569"}
+                color={active ? "#34d399" : "#475569"}
                 style={{ flexShrink: 0, transition: "color 0.2s" }}
               />
               <span
                 style={{
                   fontSize: 13,
                   fontWeight: active ? 600 : 400,
-                  color: active ? "#c7d2fe" : "#64748b",
+                  color: active ? "#a7f3d0" : "#64748b",
                   flex: 1,
                   transition: "color 0.2s",
                 }}
@@ -165,7 +166,7 @@ export default function Sidebar() {
                 {item.label}
               </span>
               {active && (
-                <ChevronRight size={12} color="#6366f1" />
+                <ChevronRight size={12} color="#10b981" />
               )}
             </Link>
           );

@@ -20,18 +20,24 @@ const DEFAULT_STATUS = {
   docsUrl: "https://docs.trychroma.com/getting-started",
 };
 
+const EXAMPLE_QUERIES = [
+  { text: "Find all risk related functions", color: "#10b981" },
+  { text: "How is health score calculated?", color: "#34d399" },
+  { text: "Security vulnerabilities in PRs", color: "#ef4444" },
+];
+
 const SETUP_STEPS = [
   {
     step: "1",
     title: "Ensure ML Engine is Running",
     code: "docker-compose up -d ml-engine",
-    color: "#6366f1",
+    color: "#10b981",
   },
   {
     step: "2",
     title: "Verify API Health",
     code: "curl http://localhost:8000/health",
-    color: "#06b6d4",
+    color: "#34d399",
   },
 ];
 
@@ -198,9 +204,10 @@ export default function RAGPage() {
                   alignItems: "center",
                   gap: 12,
                   padding: "12px 16px",
-                  borderRadius: 8,
-                  background: "rgba(17,24,39,0.6)",
-                  border: "1px solid rgba(99,102,241,0.1)",
+                  color: "#10b981",
+                  background: "rgba(16, 185, 129, 0.08)",
+                  border: "1px solid rgba(16, 185, 129, 0.15)",
+                  borderRadius: 999,
                 }}
               >
                 <div
@@ -281,7 +288,7 @@ export default function RAGPage() {
           {/* Query */}
           <div className="card">
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-              <Search size={16} color="#8b5cf6" />
+              <Search size={16} color="#059669" />
               <h2 style={{ fontSize: 14, fontWeight: 700, color: "#f1f5f9" }}>Semantic Query</h2>
             </div>
             <input
@@ -325,12 +332,12 @@ export default function RAGPage() {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                      <Code size={13} color="#6366f1" />
+                      <Code size={13} color="#10b981" />
                       <span
                         style={{
                           fontSize: 11,
                           fontFamily: "JetBrains Mono, monospace",
-                          color: "#818cf8",
+                          color: "#34d399",
                         }}
                       >
                         {String(r.metadata?.filename ?? r.id)}
@@ -340,7 +347,7 @@ export default function RAGPage() {
                           style={{
                             fontSize: 10,
                             color: "#475569",
-                            background: "rgba(99,102,241,0.08)",
+                            background: "rgba(16, 185, 129, 0.08)",
                             padding: "1px 6px",
                             borderRadius: 4,
                           }}

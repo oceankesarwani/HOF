@@ -17,8 +17,8 @@ const features = [
     title: "PR Dashboard",
     description:
       "Real-time GitHub PR monitoring with status filters, search, and detailed file breakdowns.",
-    color: "#6366f1",
-    glow: "rgba(99,102,241,0.3)",
+    color: "#10b981",
+    glow: "rgba(16,185,129,0.3)",
   },
   {
     icon: Activity,
@@ -41,8 +41,8 @@ const features = [
     title: "AI Summarizer",
     description:
       "Groq LLM translates complex diffs into plain English summaries for any stakeholder.",
-    color: "#8b5cf6",
-    glow: "rgba(139,92,246,0.3)",
+    color: "#34d399",
+    glow: "rgba(52,211,153,0.3)",
   },
   {
     icon: Shield,
@@ -75,33 +75,22 @@ export default function LandingPage() {
 
   return (
     <main
-      className="animated-gradient noise-bg grid-pattern"
-      style={{ minHeight: "100vh", position: "relative" }}
+      style={{ 
+        minHeight: "100vh", 
+        position: "relative",
+        backgroundImage: "url('/space-octocat.jpg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundAttachment: "fixed"
+      }}
     >
-      {/* ── Ambient orbs ── */}
+      {/* ── Dark Immersive Overlay ── */}
       <div
         style={{
-          position: "fixed",
-          top: "-200px",
-          left: "-200px",
-          width: "600px",
-          height: "600px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)",
-          pointerEvents: "none",
-          zIndex: 0,
-        }}
-      />
-      <div
-        style={{
-          position: "fixed",
-          bottom: "-200px",
-          right: "-200px",
-          width: "600px",
-          height: "600px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(6,182,212,0.12) 0%, transparent 70%)",
-          pointerEvents: "none",
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(circle at center, rgba(4,7,18,0.4) 0%, rgba(4,7,18,0.9) 100%)",
+          backdropFilter: "blur(1px)",
           zIndex: 0,
         }}
       />
@@ -114,12 +103,9 @@ export default function LandingPage() {
             alignItems: "center",
             justifyContent: "space-between",
             padding: "20px 48px",
-            borderBottom: "1px solid rgba(99,102,241,0.1)",
-            backdropFilter: "blur(20px)",
-            position: "sticky",
-            top: 0,
-            zIndex: 100,
-            background: "rgba(4,7,18,0.7)",
+            background: "rgba(4,7,18,0.5)",
+            borderBottom: "1px solid rgba(16,185,129,0.2)",
+            boxShadow: "0 4px 30px rgba(0,0,0,0.5)",
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
@@ -128,11 +114,11 @@ export default function LandingPage() {
                 width: 36,
                 height: 36,
                 borderRadius: 10,
-                background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+                background: "linear-gradient(135deg, #10b981, #059669)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                boxShadow: "0 0 20px rgba(99,102,241,0.4)",
+                boxShadow: "0 0 20px rgba(16,185,129,0.4)",
               }}
             >
               <Shield size={18} color="white" />
@@ -145,7 +131,7 @@ export default function LandingPage() {
                 color: "#f1f5f9",
               }}
             >
-              Commit<span style={{ color: "#818cf8" }}>Guard</span>
+              Commit<span style={{ color: "#34d399" }}>Guard</span>
             </span>
           </div>
 
@@ -166,7 +152,7 @@ export default function LandingPage() {
                 gap: 6,
                 padding: "7px 14px",
                 borderRadius: 8,
-                border: "1px solid rgba(99,102,241,0.25)",
+                border: "1px solid rgba(16,185,129,0.25)",
                 color: "#94a3b8",
                 fontSize: 13,
                 fontWeight: 500,
@@ -201,13 +187,13 @@ export default function LandingPage() {
               gap: 8,
               padding: "6px 16px",
               borderRadius: 999,
-              background: "rgba(99,102,241,0.1)",
-              border: "1px solid rgba(99,102,241,0.3)",
+              background: "rgba(16,185,129,0.1)",
+              border: "1px solid rgba(16,185,129,0.3)",
               marginBottom: 32,
             }}
           >
-            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#6366f1", display: "inline-block" }} />
-            <span style={{ fontSize: 12, color: "#818cf8", fontWeight: 600, letterSpacing: "0.08em" }}>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", display: "inline-block" }} />
+            <span style={{ fontSize: 12, color: "#34d399", fontWeight: 600, letterSpacing: "0.08em" }}>
               AI-POWERED PULL REQUEST INTELLIGENCE
             </span>
           </div>
@@ -219,11 +205,12 @@ export default function LandingPage() {
               lineHeight: 1.05,
               letterSpacing: "-0.04em",
               marginBottom: 24,
-              color: "#f1f5f9",
-            }}
-          >
-            Ship code with{" "}
-            <span className="gradient-text">confidence.</span>
+            color: "#f1f5f9",
+            textShadow: "0 0 30px rgba(16,185,129,0.4)",
+          }}
+        >
+          Ship code with{" "}
+          <span className="gradient-text" style={{ filter: "drop-shadow(0 0 15px rgba(6,182,212,0.5))" }}>confidence.</span>
           </h1>
 
           <p
@@ -275,7 +262,7 @@ export default function LandingPage() {
               style={{
                 padding: "28px 48px",
                 textAlign: "center",
-                borderRight: i < stats.length - 1 ? "1px solid rgba(99,102,241,0.15)" : "none",
+                borderRight: i < stats.length - 1 ? "1px solid rgba(16,185,129,0.15)" : "none",
               }}
             >
               <div
@@ -318,6 +305,9 @@ export default function LandingPage() {
                   style={{
                     animationDelay: `${i * 0.1}s`,
                     cursor: "default",
+                    background: "rgba(11,15,30,0.4)",
+                    backdropFilter: "blur(12px)",
+                    borderColor: "rgba(16,185,129,0.2)",
                   }}
                 >
                   <div
@@ -357,9 +347,9 @@ export default function LandingPage() {
               padding: "60px 48px",
               borderRadius: 24,
               textAlign: "center",
-              background: "linear-gradient(135deg, rgba(99,102,241,0.15), rgba(139,92,246,0.15))",
-              border: "1px solid rgba(99,102,241,0.3)",
-              boxShadow: "0 0 60px rgba(99,102,241,0.15)",
+              background: "linear-gradient(135deg, rgba(16,185,129,0.15), rgba(5,150,105,0.15))",
+              border: "1px solid rgba(16,185,129,0.3)",
+              boxShadow: "0 0 60px rgba(16,185,129,0.15)",
             }}
           >
             <h2 style={{ fontSize: 36, fontWeight: 800, letterSpacing: "-0.03em", color: "#f1f5f9", marginBottom: 16 }}>
@@ -379,7 +369,7 @@ export default function LandingPage() {
         {/* ── Footer ── */}
         <footer
           style={{
-            borderTop: "1px solid rgba(99,102,241,0.1)",
+            borderTop: "1px solid rgba(16,185,129,0.1)",
             padding: "24px 48px",
             display: "flex",
             justifyContent: "space-between",
@@ -401,6 +391,6 @@ export default function LandingPage() {
 // Helper: convert hex color to rgb string for rgba()
 function hexToRgb(hex: string): string {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!result) return "99,102,241";
+  if (!result) return "16,185,129";
   return `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}`;
 }

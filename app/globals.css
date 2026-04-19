@@ -6,13 +6,13 @@
 /* ─── Design Tokens ─── */
 :root {
   /* Brand */
-  --brand-primary: #6366f1;
-  --brand-secondary: #8b5cf6;
-  --brand-accent: #06b6d4;
+  --brand-primary: #10b981;
+  --brand-secondary: #059669;
+  --brand-accent: #2dd4bf;
   --brand-success: #10b981;
   --brand-warning: #f59e0b;
   --brand-danger: #ef4444;
-  --brand-glow: rgba(99, 102, 241, 0.4);
+  --brand-glow: rgba(16, 185, 129, 0.4);
 
   /* Surface */
   --bg-base: #040712;
@@ -22,15 +22,15 @@
   --bg-card-hover: rgba(30, 41, 59, 0.9);
 
   /* Borders */
-  --border-subtle: rgba(99, 102, 241, 0.12);
-  --border-default: rgba(99, 102, 241, 0.25);
-  --border-strong: rgba(99, 102, 241, 0.5);
+  --border-subtle: rgba(16, 185, 129, 0.12);
+  --border-default: rgba(16, 185, 129, 0.25);
+  --border-strong: rgba(16, 185, 129, 0.5);
 
   /* Text */
   --text-primary: #f1f5f9;
   --text-secondary: #94a3b8;
   --text-muted: #475569;
-  --text-accent: #818cf8;
+  --text-accent: #6ee7b7;
 
   /* Layout */
   --sidebar-width: 260px;
@@ -41,7 +41,7 @@
   --radius-xl: 24px;
 
   /* Shadows */
-  --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.15);
+  --shadow-glow: 0 0 40px rgba(16, 185, 129, 0.15);
   --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
   --shadow-elevated: 0 8px 40px rgba(0, 0, 0, 0.6);
 }
@@ -117,7 +117,7 @@ code, pre, kbd {
 .glass-hover:hover {
   background: var(--bg-card-hover);
   border-color: var(--border-strong);
-  box-shadow: var(--shadow-glow);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
   transform: translateY(-1px);
 }
 
@@ -138,7 +138,7 @@ code, pre, kbd {
 
 /* ─── Glow Effects ─── */
 .glow-primary {
-  box-shadow: 0 0 30px rgba(99, 102, 241, 0.3), 0 0 60px rgba(99, 102, 241, 0.1);
+  box-shadow: 0 0 30px rgba(16, 185, 129, 0.3), 0 0 60px rgba(16, 185, 129, 0.1);
 }
 
 .glow-success {
@@ -175,8 +175,8 @@ code, pre, kbd {
 /* ─── Grid Pattern ─── */
 .grid-pattern {
   background-image:
-    linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+    linear-gradient(rgba(16, 185, 129, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 185, 129, 0.05) 1px, transparent 1px);
   background-size: 40px 40px;
 }
 
@@ -238,12 +238,12 @@ code, pre, kbd {
   transition: all 0.2s ease;
   background: linear-gradient(135deg, var(--brand-primary), var(--brand-secondary));
   color: white;
-  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
 }
 
 .btn-primary:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+  box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
 }
 
 .btn-primary:disabled {
@@ -270,7 +270,7 @@ code, pre, kbd {
 .btn-ghost:hover {
   border-color: var(--border-strong);
   color: var(--text-primary);
-  background: rgba(99, 102, 241, 0.1);
+  background: rgba(16, 185, 129, 0.1);
 }
 
 /* ─── Cards ─── */
@@ -303,7 +303,7 @@ code, pre, kbd {
 
 .input:focus {
   border-color: var(--brand-primary);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
 }
 
 .input::placeholder {

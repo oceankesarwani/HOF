@@ -18,17 +18,17 @@ import type { MatrixPoint } from "@/types";
 import { Info, AlertCircle } from "lucide-react";
 
 const QUADRANT_COLORS: Record<string, string> = {
-  "High Effort / High Impact": "#ef4444",
-  "Low Effort / High Impact": "#10b981",
-  "High Effort / Low Impact": "#f59e0b",
-  "Low Effort / Low Impact": "#6366f1",
+  "High Effort / High Impact": "#10b981",
+  "High Effort / Low Impact": "#ef4444",
+  "Low Effort / High Impact": "#34d399",
+  "Low Effort / Low Impact": "#10b981",
 };
 
-const QUADRANT_LABELS = [
-  { x: 75, y: 75, text: "High Effort / High Impact", color: "#ef4444", sub: "Ship carefully" },
-  { x: 25, y: 75, text: "Low Effort / High Impact", color: "#10b981", sub: "Quick wins" },
-  { x: 75, y: 25, text: "High Effort / Low Impact", color: "#f59e0b", sub: "Evaluate scope" },
-  { x: 25, y: 25, text: "Low Effort / Low Impact", color: "#6366f1", sub: "Routine changes" },
+const QUADRANTS = [
+  { x: 75, y: 75, text: "High Effort / High Impact", color: "#10b981", sub: "Strategic initiatives" },
+  { x: 75, y: 25, text: "High Effort / Low Impact", color: "#ef4444", sub: "Re-evaluate priority" },
+  { x: 25, y: 75, text: "Low Effort / High Impact", color: "#34d399", sub: "Quick wins" },
+  { x: 25, y: 25, text: "Low Effort / Low Impact", color: "#10b981", sub: "Routine changes" },
 ];
 
 interface CustomDotProps {
@@ -156,18 +156,20 @@ export default function MatrixPage() {
             gap: 10,
             padding: "12px 16px",
             borderRadius: 8,
-            background: "rgba(99,102,241,0.07)",
-            border: "1px solid rgba(99,102,241,0.15)",
+            background: "rgba(16, 185, 129, 0.07)",
+            border: "1px solid rgba(16, 185, 129, 0.15)",
             marginBottom: 20,
             alignItems: "flex-start",
           }}
         >
-          <Info size={14} color="#6366f1" style={{ marginTop: 2, flexShrink: 0 }} />
-          <p style={{ fontSize: 12, color: "#64748b", lineHeight: 1.6 }}>
-            <strong style={{ color: "#818cf8" }}>Effort</strong> = logarithmic scale of lines changed (additions + deletions).{" "}
-            <strong style={{ color: "#818cf8" }}>Impact</strong> = weighted score based on critical file paths
-            (auth, security, payments = high; tests, docs = low).
-          </p>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Info size={14} color="#10b981" style={{ marginTop: 2, flexShrink: 0 }} />
+            <div style={{ fontSize: 13, color: "#94a3b8", lineHeight: 1.6 }}>
+              <strong style={{ color: "#34d399" }}>Effort</strong> = logarithmic scale of lines changed (additions + deletions).{" "}
+              <strong style={{ color: "#34d399" }}>Impact</strong> = weighted score based on critical file paths
+              (auth, security, payments = high; tests, docs = low).
+            </div>
+          </div>
         </div>
 
         {/* Legend */}
@@ -190,13 +192,13 @@ export default function MatrixPage() {
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <ScatterChart margin={{ top: 20, right: 30, bottom: 40, left: 40 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(99,102,241,0.08)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(16, 185, 129, 0.08)" />
                 <XAxis
                   type="number"
                   dataKey="effort"
                   domain={[0, 100]}
                   tick={{ fill: "#475569", fontSize: 11 }}
-                  axisLine={{ stroke: "rgba(99,102,241,0.2)" }}
+                  axisLine={{ stroke: "rgba(16, 185, 129, 0.2)" }}
                   tickLine={false}
                 >
                   <Label
@@ -212,7 +214,7 @@ export default function MatrixPage() {
                   dataKey="impact"
                   domain={[0, 100]}
                   tick={{ fill: "#475569", fontSize: 11 }}
-                  axisLine={{ stroke: "rgba(99,102,241,0.2)" }}
+                  axisLine={{ stroke: "rgba(16, 185, 129, 0.2)" }}
                   tickLine={false}
                 >
                   <Label
@@ -225,8 +227,8 @@ export default function MatrixPage() {
                   />
                 </YAxis>
                 <Tooltip content={<CustomTooltip />} cursor={false} />
-                <ReferenceLine x={50} stroke="rgba(99,102,241,0.2)" strokeDasharray="5 5" />
-                <ReferenceLine y={50} stroke="rgba(99,102,241,0.2)" strokeDasharray="5 5" />
+                <ReferenceLine x={50} stroke="rgba(16, 185, 129, 0.2)" strokeDasharray="5 5" />
+                <ReferenceLine y={50} stroke="rgba(16, 185, 129, 0.2)" strokeDasharray="5 5" />
                 <Scatter
                   data={data}
                   shape={(props: CustomDotProps) => <CustomDot {...props} />}
@@ -275,8 +277,8 @@ export default function MatrixPage() {
                       return (
                         <tr
                           key={row.prNumber}
-                          style={{ borderBottom: "1px solid rgba(99,102,241,0.05)" }}
-                          onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(99,102,241,0.04)")}
+                          style={{ borderBottom: "1px solid rgba(16, 185, 129, 0.05)" }}
+                          onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(16, 185, 129, 0.04)")}
                           onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                         >
                           <td style={{ padding: "10px 16px", color: "#475569", fontFamily: "JetBrains Mono, monospace" }}>

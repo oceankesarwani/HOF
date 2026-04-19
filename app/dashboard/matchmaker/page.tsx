@@ -262,10 +262,10 @@ export default function MatchmakerPage() {
                     style={{
                       fontFamily: "JetBrains Mono, monospace",
                       fontSize: 12,
-                      color: "#818cf8",
+                      color: "#34d399",
                       marginBottom: 12,
                       padding: "4px 10px",
-                      background: "rgba(99,102,241,0.1)",
+                      background: "rgba(52,211,153,0.1)",
                       borderRadius: 5,
                       display: "inline-block",
                       maxWidth: "100%",

@@ -36,6 +36,8 @@ export async function POST(request: NextRequest) {
       diff
     );
 
+    console.log(`[HealthAPI] RAW Result for PR #${prNumber}:`, JSON.stringify(healthResult, null, 2));
+
     return NextResponse.json({
       prNumber,
       title: pr.title,
@@ -43,6 +45,7 @@ export async function POST(request: NextRequest) {
       ...healthResult
     });
   } catch (err) {
+    console.error(`[HealthAPI] CRITICAL ERROR:`, err);
     const message = err instanceof Error ? err.message : "Unknown error";
     return NextResponse.json({ error: message }, { status: 500 });
   }

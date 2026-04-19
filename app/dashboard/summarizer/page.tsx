@@ -29,7 +29,7 @@ function MarkdownRenderer({ text }: { text: string }) {
               key={i}
               style={{ display: "flex", gap: 8, marginBottom: 4 }}
               dangerouslySetInnerHTML={{
-                __html: `<span style="color:#6366f1;margin-top:2px">›</span><span style="color:#94a3b8">${boldLine.slice(2)}</span>`,
+                __html: `<span style="color:#10b981;margin-top:2px">›</span><span style="color:#94a3b8">${boldLine.slice(2)}</span>`,
               }}
             />
           );
@@ -116,8 +116,8 @@ export default function SummarizerPage() {
                 justifyContent: "center",
               }}
             >
-              <Brain size={16} color="#8b5cf6" />
-            </div>
+              <Brain size={16} color="#059669" />
+ Riverside            </div>
             <div>
               <h2 style={{ fontSize: 15, fontWeight: 700, color: "#f1f5f9" }}>
                 Summarize Pull Request Diff
@@ -177,29 +177,29 @@ export default function SummarizerPage() {
           {selectedPRData && (
             <div
               style={{
-                marginTop: 14,
-                padding: "10px 14px",
-                borderRadius: 8,
-                background: "rgba(99,102,241,0.06)",
-                border: "1px solid rgba(99,102,241,0.12)",
-                display: "flex",
-                gap: 16,
+                marginTop: 24,
+                padding: "16px 20px",
+                background: "rgba(16, 185, 129, 0.06)",
+                border: "1px solid rgba(16, 185, 129, 0.12)",
+                borderRadius: 12,
+                marginBottom: 24,
                 fontSize: 12,
-                color: "#64748b",
               }}
             >
-              <span>
-                <strong style={{ color: "#818cf8" }}>Author:</strong> @{selectedPRData.user.login}
-              </span>
-              <span>
-                <strong style={{ color: "#818cf8" }}>+{selectedPRData.additions}</strong> additions
-              </span>
-              <span>
-                <strong style={{ color: "#818cf8" }}>-{selectedPRData.deletions}</strong> deletions
-              </span>
-              <span>
-                <strong style={{ color: "#818cf8" }}>{selectedPRData.changed_files}</strong> files
-              </span>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: "10px 20px" }}>
+                <div style={{ fontSize: 13, color: "#64748b" }}>
+                  <strong style={{ color: "#34d399" }}>Author:</strong> @{selectedPRData.user.login}
+                </div>
+                <div style={{ fontSize: 13, color: "#64748b" }}>
+                  <strong style={{ color: "#34d399" }}>+{selectedPRData.additions}</strong> additions
+                </div>
+                <div style={{ fontSize: 13, color: "#64748b" }}>
+                  <strong style={{ color: "#34d399" }}>-{selectedPRData.deletions}</strong> deletions
+                </div>
+                <div style={{ fontSize: 13, color: "#64748b" }}>
+                  <strong style={{ color: "#34d399" }}>{selectedPRData.changed_files}</strong> files
+                </div>
+              </div>
             </div>
           )}
         </div>
@@ -229,8 +229,8 @@ export default function SummarizerPage() {
               padding: "40px 24px",
               textAlign: "center",
               borderRadius: 14,
-              background: "rgba(139,92,246,0.08)",
-              border: "1px solid rgba(139,92,246,0.2)",
+              background: "rgba(16, 185, 129, 0.08)",
+              border: "1px solid rgba(16, 185, 129, 0.2)",
             }}
           >
             <div
@@ -238,13 +238,13 @@ export default function SummarizerPage() {
                 width: 40,
                 height: 40,
                 borderRadius: "50%",
-                border: "2px solid rgba(139,92,246,0.3)",
-                borderTop: "2px solid #8b5cf6",
+                border: "2px solid rgba(16, 185, 129, 0.3)",
+                borderTop: "2px solid #059669",
                 margin: "0 auto 16px",
                 animation: "spin 1s linear infinite",
               }}
             />
-            <div style={{ fontSize: 14, color: "#8b5cf6", fontWeight: 600 }}>
+            <div style={{ fontSize: 14, color: "#059669", fontWeight: 600 }}>
               Analyzing diff with Groq LLM…
             </div>
             <div style={{ fontSize: 12, color: "#475569", marginTop: 6 }}>
@@ -283,8 +283,8 @@ export default function SummarizerPage() {
                     marginBottom: 10,
                   }}
                 >
-                  <Sparkles size={11} color="#8b5cf6" />
-                  <span style={{ fontSize: 10, fontWeight: 700, color: "#8b5cf6", letterSpacing: "0.08em" }}>
+                  <Sparkles size={11} color="#059669" />
+                  <span style={{ fontSize: 10, fontWeight: 700, color: "#059669", letterSpacing: "0.08em" }}>
                     AI SUMMARY · {result.model}
                   </span>
                   {result.tokensUsed && (

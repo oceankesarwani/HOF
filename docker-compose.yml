@@ -8,6 +8,11 @@ services:
     environment:
       - ML_ENGINE_URL=http://ml-engine:8000
       - DATABASE_URL=file:./dev.db
+      - GITHUB_TOKEN=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
+      - GROQ_API_KEY=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
+      - NEXT_PUBLIC_GITHUB_OWNER=oceankesarwani
+      - NEXT_PUBLIC_GITHUB_REPO=Cafe-website
+      - GITHUB_WEBHOOK_SECRET=CommitGuard_Super_Secret_123
     depends_on:
       - ml-engine
     command: npm run dev

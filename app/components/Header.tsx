@@ -74,11 +74,11 @@ export default function Header({ title, subtitle }: HeaderProps) {
           style={{
             display: "flex",
             alignItems: "center",
-            gap: 8,
-            padding: "6px 14px",
-            borderRadius: 8,
-            background: "rgba(99,102,241,0.1)",
-            border: "1px solid rgba(99,102,241,0.2)",
+            gap: 6,
+            padding: "4px 10px",
+            background: "rgba(16, 185, 129, 0.1)",
+            border: "1px solid rgba(16, 185, 129, 0.2)",
+            borderRadius: 6,
             textDecoration: "none",
             transition: "all 0.2s",
           }}
@@ -87,14 +87,14 @@ export default function Header({ title, subtitle }: HeaderProps) {
           <span
             style={{
               fontSize: 12,
-              color: "#818cf8",
+              color: "#34d399",
               fontFamily: "JetBrains Mono, monospace",
               fontWeight: 500,
             }}
           >
             {owner}/{repo}
           </span>
-          <ExternalLink size={11} color="#6366f1" />
+          <ExternalLink size={11} color="#10b981" />
         </a>
 
         {/* Clock */}

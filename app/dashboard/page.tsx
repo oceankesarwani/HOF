@@ -81,11 +81,11 @@ function PRRow({ pr }: { pr: PullRequest }) {
         alignItems: "center",
         gap: 14,
         padding: "14px 20px",
-        borderBottom: "1px solid rgba(99,102,241,0.07)",
+        borderBottom: "1px solid rgba(16,185,129,0.07)",
         transition: "background 0.2s",
         cursor: "pointer",
       }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(99,102,241,0.05)")}
+      onMouseEnter={(e) => (e.currentTarget.style.background = "rgba(16,185,129,0.05)")}
       onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
     >
       <GitPullRequest size={16} color={stateColor} style={{ flexShrink: 0 }} />
@@ -235,8 +235,8 @@ export default function DashboardPage() {
                 icon={GitMerge}
                 label="Merged PRs"
                 value={merged}
-                color="#8b5cf6"
-                glow="rgba(139,92,246,0.3)"
+                color="#059669"
+                glow="rgba(5,150,105,0.3)"
               />
               <StatCard
                 icon={Clock}
@@ -267,14 +267,14 @@ export default function DashboardPage() {
             <div
               style={{
                 padding: "18px 20px",
-                borderBottom: "1px solid rgba(99,102,241,0.1)",
+                borderBottom: "1px solid rgba(16, 185, 129, 0.1)",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
               }}
             >
               <h2 style={{ fontSize: 15, fontWeight: 700, color: "#f1f5f9" }}>Recent Pull Requests</h2>
-              <Link href="/dashboard/prs" style={{ fontSize: 12, color: "#6366f1", textDecoration: "none" }}>
+              <Link href="/dashboard/prs" style={{ fontSize: 12, color: "#10b981", textDecoration: "none" }}>
                 View all →
               </Link>
             </div>
@@ -298,7 +298,7 @@ export default function DashboardPage() {
             <div
               style={{
                 padding: "18px 20px",
-                borderBottom: "1px solid rgba(99,102,241,0.1)",
+                borderBottom: "1px solid rgba(16, 185, 129, 0.1)",
                 display: "flex",
                 alignItems: "center",
                 gap: 8,
@@ -325,11 +325,11 @@ export default function DashboardPage() {
                       padding: "10px 12px",
                       borderRadius: 8,
                       marginBottom: 6,
-                      background: "rgba(99,102,241,0.06)",
-                      border: "1px solid rgba(99,102,241,0.1)",
+                      background: "rgba(16,185,129,0.06)",
+                      border: "1px solid rgba(16,185,129,0.1)",
                     }}
                   >
-                    <div style={{ fontSize: 12, fontWeight: 600, color: "#818cf8" }}>
+                    <div style={{ fontSize: 12, fontWeight: 600, color: "#34d399" }}>
                       PR #{ev.pr_number} · {ev.action}
                     </div>
                     <div style={{ fontSize: 11, color: "#475569", marginTop: 2, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
@@ -351,6 +351,6 @@ export default function DashboardPage() {
 
 function hexRgb(hex: string): string {
   const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  if (!r) return "99,102,241";
+  if (!r) return "16,185,129";
   return `${parseInt(r[1], 16)},${parseInt(r[2], 16)},${parseInt(r[3], 16)}`;
 }
