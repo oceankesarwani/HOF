@@ -1,17 +1,22 @@
-import * as PrismaModule from "@prisma/client";
+// @ts-ignore
+import { PrismaClient } from "@prisma/client";
 
-// Prevent multiple instances of Prisma Client in development
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    log: ["query"],
+  });
+};
+
 declare global {
-  var prisma: PrismaModule.PrismaClient | undefined;
+  var prisma: undefined | ReturnType<typeof prismaClientSingleton>;
 }
 
-// Do not instantiate Prisma immediately because Turbopack 
-// pre-evaluates modules in an Edge sandbox, causing crashes.
-export const prisma = new Proxy({} as PrismaModule.PrismaClient, {
+// Tactical Lazy Proxy: Prevents instantiation during build-time evaluation
+export const prisma = new Proxy({} as any, {
   get: (target, prop) => {
-    if (!global.prisma) {
-      global.prisma = new PrismaModule.PrismaClient({ log: ["query"] });
+    if (!globalThis.prisma) {
+      globalThis.prisma = prismaClientSingleton();
     }
-    return (global.prisma as any)[prop];
+    return (globalThis.prisma as any)[prop];
   }
-});
+}) as ReturnType<typeof prismaClientSingleton>;
