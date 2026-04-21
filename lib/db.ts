@@ -11,7 +11,7 @@ declare global {
   var prisma: undefined | ReturnType<typeof prismaClientSingleton>;
 }
 
-// Tactical Lazy Proxy: Prevents instantiation during build-time evaluation
+// Tactical Lazy Proxy: Defers instantiation until real runtime access
 export const prisma = new Proxy({} as any, {
   get: (target, prop) => {
     if (!globalThis.prisma) {

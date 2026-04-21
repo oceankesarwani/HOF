@@ -5,16 +5,20 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    restart: unless-stopped
     env_file:
       - .env.local
     environment:
       - ML_ENGINE_URL=http://ml-engine:8000
     depends_on:
-      - ml-engine
-    command: npm run dev
-    volumes:
-      - .:/app
-      - /app/node_modules
+      ml-engine:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    # Note: Production uses the CMD defined in Dockerfile (npm start)
 
   ml-engine:
     build:
@@ -22,9 +26,15 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 5
     volumes:
-      - ./ml-engine:/app
-      # Cache downloaded models
+      # Data and Model Persistence
+      - ./ml-engine/chroma_data:/app/chroma_data
       - huggingface-cache:/root/.cache/huggingface
       - sentence-transformers-cache:/root/.cache/torch
 

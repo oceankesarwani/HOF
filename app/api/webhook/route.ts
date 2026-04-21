@@ -59,30 +59,37 @@ export async function POST(request: NextRequest) {
       ((payload.repository as Record<string, unknown>)?.full_name as string) ?? ""
     );
 
-    await prisma.webhookEvent.create({
-      data: {
-        event,
-        action,
-        prNumber,
-        title: prTitle,
-        sender: senderLogin,
-        repo: repoName,
-      },
-    });
-
-    console.log(`[Webhook] PR #${prNumber} (${action}) by ${senderLogin} in ${repoName}`);
+    try {
+      await prisma.webhookEvent.create({
+        data: {
+          event,
+          action,
+          prNumber,
+          title: prTitle,
+          sender: senderLogin,
+          repo: repoName,
+        },
+      });
+      console.log(`[Webhook] PR #${prNumber} (${action}) by ${senderLogin} in ${repoName}`);
+    } catch (dbError) {
+      console.error("[Webhook] Database error saving event:", dbError);
+      // We continue even if DB save fails to at least try triggering tasks if possible,
+      // or to return a success to GitHub to avoid webhook retries.
+    }
 
     // Trigger Knowledge Bridge background tasks async
     if (action === "opened" || action === "synchronize") {
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      
       // 1. Summarization
-      fetch(`http://localhost:3000/api/summarize`, {
+      fetch(`${baseUrl}/api/summarize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prNumber }),
       }).catch(e => console.warn("Failed to trigger summarization", e));
 
       // 2. Documentation Sync Check
-      fetch(`http://localhost:3000/api/sync/check`, {
+      fetch(`${baseUrl}/api/sync/check`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prNumber }),
@@ -104,20 +111,25 @@ export async function POST(request: NextRequest) {
 
 // GET — return recent event log (for dashboard display)
 export async function GET() {
-  const events = await prisma.webhookEvent.findMany({
-    orderBy: { receivedAt: "desc" },
-    take: 100,
-  });
-  
-  // Format to match expected frontend interface if needed
-  const formattedEvents = events.map((e: any) => ({
-    action: e.action,
-    pr_number: e.prNumber,
-    title: e.title,
-    sender: e.sender,
-    repo: e.repo,
-    received_at: e.receivedAt.toISOString(),
-  }));
+  try {
+    const events = await prisma.webhookEvent.findMany({
+      orderBy: { receivedAt: "desc" },
+      take: 100,
+    });
+    
+    // Format to match expected frontend interface if needed
+    const formattedEvents = events.map((e: any) => ({
+      action: e.action,
+      pr_number: e.prNumber,
+      title: e.title,
+      sender: e.sender,
+      repo: e.repo,
+      received_at: e.receivedAt.toISOString(),
+    }));
 
-  return Response.json(formattedEvents);
+    return Response.json(formattedEvents);
+  } catch (error) {
+    console.error("[Webhook GET] Error fetching events:", error);
+    return Response.json([], { status: 500 });
+  }
 }

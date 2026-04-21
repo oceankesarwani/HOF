@@ -5,6 +5,7 @@ WORKDIR /app
 # Install build dependencies for chroma and torch
 RUN apt-get update && apt-get install -y \
     build-essential \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
