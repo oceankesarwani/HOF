@@ -53,8 +53,8 @@ CommitGuard establishes live WebSocket / Webhooks with your GitHub repository, p
 
 1. First, clone the repository and navigate into the directory:
    ```bash
-   git clone https://github.com/your-org/CommitGuard.git
-   cd CommitGuard
+   git clone https://github.com/your-org/HOF.git
+   cd HOF
    ```
 
 2. Install the necessary dependencies:
